@@ -16,4 +16,18 @@ RSpec.describe User, type: :model do
       expect(user.places).to include(place)
     end
   end
+
+  describe ".create_from_omniauth" do
+    it "creates a user" do
+      user_info = {
+        'info' => {
+          'name' => 'John Smith',
+          'email' => 'foo@bar.com',
+        }
+      }
+      user = User.create_from_omniauth(user_info)
+      expect(user.name).to eq('John Smith')
+      expect(user.email).to eq('foo@bar.com')
+    end
+  end
 end
