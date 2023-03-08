@@ -9,4 +9,10 @@ class User < ApplicationRecord
       email: user_info['info']['email'],
     )
   end
+
+  def save_places(ids)
+    return if ids.nil?
+    saved_ids = places.pluck(:id)
+    self.places = Place.where(id: (ids + saved_ids).uniq)
+  end
 end

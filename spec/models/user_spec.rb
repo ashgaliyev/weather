@@ -30,4 +30,21 @@ RSpec.describe User, type: :model do
       expect(user.email).to eq('foo@bar.com')
     end
   end
+
+  describe "#save_places" do
+    it "saves places" do
+      user = create(:user)
+      place = create(:place, :with_forecast)
+      user.save_places([place.id])
+      expect(user.places).to include(place)
+    end
+
+    it "does not save duplicate places" do
+      user = create(:user)
+      place = create(:place, :with_forecast)
+      user.places << place
+      user.save_places([place.id])
+      expect(user.places.count).to eq(1)
+    end
+  end
 end

@@ -12,6 +12,17 @@
   </head>
 
   <body class="bg-slate-500">
+    <div class="container mx-auto mt-8 px-5 flex">
+      <% if user_logged_in? %>
+        <span><%= current_user.name %></span>
+        <br />
+        <%= link_to 'Logout', logout_path, method: :delete %>
+      <% else %>
+        <span>Guest</span>
+        <br />
+        <%= link_to 'Login', login_path %>
+      <% end %>
+    </div>
     <main class="container mx-auto p-5 flex bg-slate-50 rounded shadow">
       <%= yield %>
     </main>
