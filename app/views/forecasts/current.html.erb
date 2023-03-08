@@ -1,0 +1,9 @@
+<% content_for :props do %>
+<script>
+  window.props = "<%= j render(template: 'forecasts/current', formats: :json).html_safe %>";
+</script>
+<% end %>
+
+<% content_for :scripts do %>
+  <%= javascript_pack_tag 'weather' %>
+<% end %>

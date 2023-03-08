@@ -4,4 +4,8 @@ class Guest
   def initialize(session)
     @session = session
   end
+
+  def places
+    Place.where(id: session[:places])
+  end
 end
