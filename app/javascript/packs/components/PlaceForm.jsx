@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Map from "./Map";
-import { createPlace, updatePlace } from "../api";
+import { createPlace, updatePlace } from "../utils/api";
 import { placeFormShape } from "../utils/types";
 
 const propTypes = {
@@ -88,10 +88,10 @@ const PlaceForm = ({ onSubmit, place }) => {
           handleFormSubmit();
         }}
       >
-        {["name", "lat", "lng"].map((key) => {
+        {["name", "lat", "lng"].map((key, i) => {
           const value = form[key];
           return (
-            <div className="flex flex-col mr-3">
+            <div key={i} className="flex flex-col mr-3">
               <label htmlFor={key}>{LABEL[key]}</label>
               <input
                 type="text"
@@ -110,13 +110,16 @@ const PlaceForm = ({ onSubmit, place }) => {
         })}
 
         <div className="flex flex-col justify-start mt-6">
-          <button className="bg-blue-500 text-white p-2 rounded" type="submit">
+          <button
+            className="bg-blue-500 text-white p-2 rounded"
+            type="submit"
+            data-test-id={place === undefined ? "create-place" : "update-place"}
+          >
             {place === undefined ? "Create" : "Update"}
           </button>
         </div>
       </form>
       <Map
-        apiKey=""
         onGeocode={handleGeoCode}
         defaultCenter={
           place === undefined

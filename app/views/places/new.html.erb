@@ -1,3 +1,9 @@
+<% content_for :props do %>
+<script>
+  window.settings = "<%= j render(partial: 'settings', formats: :json).html_safe %>";
+</script>
+<% end %>
+
 <% content_for :scripts do %>
   <%= javascript_pack_tag 'new_place' %>
 <% end %>

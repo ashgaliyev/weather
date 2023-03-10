@@ -1,15 +1,17 @@
-import ReactDOM from "react-dom";
 import * as React from "react";
 import PropTypes from "prop-types";
 import { fiveDaysForecastShape, placeShape } from "./utils/types";
-import { deletePlace } from "./api";
+import { deletePlace } from "./utils/api";
 import PlaceCard from "./components/PlaceCard/PlaceCard";
-import TempProvider from "./components/TempProvider";
+import { SettingsContext } from "./components/SettingsProvider";
 import TempSwitcher from "./components/TempSwitcher/TempSwitcher";
 import Page from "./components/Page";
 import Navigation from "./components/Navigation";
+import renderApp from "./utils/renderApp";
 
-const FiveDays = (props) => {
+const ShowPlace = (props) => {
+  const { buildUrl } = React.useContext(SettingsContext);
+
   const days = props.forecast.fiveDays.reduce((acc, weather) => {
     const date = new Date(weather.date);
     date.setHours(0, 0, 0, 0);
@@ -28,14 +30,13 @@ const FiveDays = (props) => {
   return (
     <Page
       heading={props.place.name}
-      tempUnit={props.tempUnit}
       topBlockLeft={
         <Navigation
           links={[
             { name: "← Back", url: "/" },
             {
               name: "Edit",
-              url: `/places/${props.place.id}/edit`,
+              url: buildUrl.editPlaceUrl(props.place.id),
             },
             {
               name: "Delete",
@@ -96,19 +97,9 @@ const FiveDays = (props) => {
   );
 };
 
-FiveDays.propTypes = {
-  weatherType: PropTypes.string.isRequired,
+ShowPlace.propTypes = {
   forecast: fiveDaysForecastShape,
   place: placeShape,
-  tempUnit: PropTypes.string.isRequired,
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  const props = JSON.parse(window.props);
-  const settings = JSON.parse(window.settings);
-
-  ReactDOM.render(
-    <FiveDays {...props} {...settings} />,
-    document.getElementsByTagName("main")[0]
-  );
-});
+renderApp(ShowPlace);

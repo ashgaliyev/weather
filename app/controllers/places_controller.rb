@@ -1,11 +1,13 @@
 class PlacesController < ApplicationController
-  before_action :set_place, only: [:edit, :update]
+  before_action :set_place, only: [:edit, :update, :show]
 
   def index
-    @places = current_user.places
+    @places = current_user.places.includes(:forecast).order(:id)
+    @forecasts = @places.map(&:forecast)
   end
 
   def show
+    @forecast = @place.forecast
   end
 
   def new

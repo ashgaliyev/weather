@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { TempContext } from "../TempProvider";
+import { SettingsContext } from "../SettingsProvider";
 import * as Switch from "@radix-ui/react-switch";
 
 const TempSwitcher = () => {
-  const { tempType, toggleTempType } = useContext(TempContext);
+  const { tempType, toggleTempType } = useContext(SettingsContext);
 
   return (
     <div

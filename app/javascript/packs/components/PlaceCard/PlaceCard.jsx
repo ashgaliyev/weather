@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import React, { useContext } from "react";
-import { TempContext } from "../TempProvider";
+import { SettingsContext } from "../SettingsProvider";
 import placeholder from "./icon_placeholder.png";
 import { weatherShape } from "../../utils/types";
 
@@ -21,7 +21,7 @@ const PlaceCard = ({ heading, weather, onClick }) => {
 
   const { tempMin, tempMax, windSpeed, icon, description, date } = weather;
 
-  const { tempType } = useContext(TempContext);
+  const { tempType } = useContext(SettingsContext);
 
   const tempMinC = Math.round(tempMin - 273.15);
   const tempMaxC = Math.round(tempMax - 273.15);
@@ -38,6 +38,7 @@ const PlaceCard = ({ heading, weather, onClick }) => {
     <div
       className="bg-white rounded-lg shadow-lg flex flex-row p-4 pl-0 max-w-sm hover:cursor-pointer"
       onClick={onClick}
+      data-test-id="place-card"
     >
       <div className="flex-none w-24">
         <img

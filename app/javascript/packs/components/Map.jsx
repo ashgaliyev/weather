@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import GoogleMapReact from "google-map-react";
 import GooglePlacesAutocomplete, {
   geocodeByPlaceId,
   geocodeByLatLng,
 } from "react-google-places-autocomplete";
+import { SettingsContext } from "./SettingsProvider";
 
 const Marker = ({ lat, lng }) => (
   <div className="marker bg-red-500 w-[20px] h-[20px] rounded-full border-slate-900 border-2"></div>
@@ -12,14 +13,14 @@ const Marker = ({ lat, lng }) => (
 
 const propTypes = {
   onGeocode: PropTypes.func.isRequired,
-  apiKey: PropTypes.string.isRequired,
   defaultCenter: PropTypes.shape({
     lat: PropTypes.number,
     lng: PropTypes.number,
   }),
 };
 
-const Map = ({ onGeocode, apiKey, defaultCenter }) => {
+const Map = ({ onGeocode, defaultCenter }) => {
+  const { mapApiKey } = useContext(SettingsContext);
   const [center, setCenter] = useState(defaultCenter);
   const [zoom, setZoom] = useState(11);
   const [marker, setMarker] = useState(null);
@@ -126,7 +127,7 @@ const Map = ({ onGeocode, apiKey, defaultCenter }) => {
       {center && (
         <GoogleMapReact
           bootstrapURLKeys={{
-            key: apiKey,
+            key: mapApiKey,
             libraries: ["places"],
           }}
           defaultCenter={{ lat: center.lat, lng: center.lng }}
