@@ -7,7 +7,7 @@ const TempSwitcher = () => {
 
   return (
     <div
-      className="flex mb-2 justify-end items-center"
+      className="flex justify-end items-center"
       style={{ display: "flex", alignItems: "center" }}
     >
       <label
@@ -20,6 +20,7 @@ const TempSwitcher = () => {
         className="w-[42px] h-[25px] bg-blackA9 rounded-full relative bg-black outline-none cursor-default"
         id="airplane-mode"
         onCheckedChange={toggleTempType}
+        checked={tempType === "Fahrenheit"}
       >
         <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
       </Switch.Root>

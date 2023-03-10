@@ -1,6 +1,7 @@
 <% content_for :props do %>
 <script>
   window.props = "<%= j render(template: 'forecasts/five_days', formats: :json).html_safe %>";
+  window.settings = "<%= j render(partial: 'settings', formats: :json).html_safe %>";
 </script>
 <% end %>
 
