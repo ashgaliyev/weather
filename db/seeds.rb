@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 #
@@ -9,34 +11,34 @@
 user = User.first
 
 if user
-  if user.places.exists?(name: 'Uralsk')
-    puts "User already has Uralsk\n"
+  if user.places.exists?(name: "Uralsk")
+    Rails.logger.debug("User already has Uralsk\n")
     exit
   end
 
-  puts "Seeding user #{user.name}..."
-  forecast_contents = JSON.parse(File.read('spec/fixtures/forecast.json'))
-  weather_contents = JSON.parse(File.read('spec/fixtures/weather.json'))
+  Rails.logger.debug { "Seeding user #{user.name}..." }
+  forecast_contents = JSON.parse(File.read("spec/fixtures/forecast.json"))
+  weather_contents = JSON.parse(File.read("spec/fixtures/weather.json"))
 
-  puts 'Creating forecast... '
+  Rails.logger.debug("Creating forecast... ")
   forecast = Forecast.create!(
-    lat: weather_contents['coord']['lat'],
-    lng: weather_contents['coord']['lon'],
+    lat: weather_contents["coord"]["lat"],
+    lng: weather_contents["coord"]["lon"],
     current: weather_contents,
     five_days: forecast_contents
   )
 
-  puts 'Creating place... '
+  Rails.logger.debug("Creating place... ")
   place = Place.create!(
-    name: 'Uralsk',
-    lat: weather_contents['coord']['lat'],
-    lng: weather_contents['coord']['lon'],
-    forecast: forecast
+    name: "Uralsk",
+    lat: weather_contents["coord"]["lat"],
+    lng: weather_contents["coord"]["lon"],
+    forecast:
   )
 
-  puts 'Creating user place... '
+  Rails.logger.debug("Creating user place... ")
   user.places << place
-  puts 'Done!'
+  Rails.logger.debug("Done!")
 else
-  puts 'No users found'
+  Rails.logger.debug("No users found")
 end

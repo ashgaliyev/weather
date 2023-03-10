@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PlaceHelpers
   def amsterdam_center
     { lat: 52.35744523071499, lng: 4.880759414295106 }

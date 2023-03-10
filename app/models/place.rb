@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Place < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :forecast, optional: true
@@ -15,14 +17,10 @@ class Place < ApplicationRecord
 
   def set_forecast
     forecast = Forecast.within(10, origin: [lat, lng]).first
-    if forecast.present?
-      self.forecast = forecast
-    else
-      self.forecast = Forecast.create(lat: lat, lng: lng)
-    end
+    self.forecast = (forecast.presence || Forecast.create!(lat:, lng:))
   end
 
   def destroy_forecast
-    forecast.destroy if forecast.places.empty?
+    forecast.destroy! if forecast.places.empty?
   end
 end

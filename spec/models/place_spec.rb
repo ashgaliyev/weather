@@ -1,20 +1,22 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-RSpec.describe Place, type: :model do
+require "rails_helper"
+
+RSpec.describe(Place, type: :model) do
   describe "validations" do
     it "is invalid without a name" do
       place = build(:place, name: nil)
-      expect(place).to be_invalid
+      expect(place).to(be_invalid)
     end
 
     it "is invalid without a lat" do
       place = build(:place, lat: nil)
-      expect(place).to be_invalid
+      expect(place).to(be_invalid)
     end
 
     it "is invalid without a lng" do
       place = build(:place, lng: nil)
-      expect(place).to be_invalid
+      expect(place).to(be_invalid)
     end
   end
 
@@ -25,7 +27,7 @@ RSpec.describe Place, type: :model do
       it "sets the forecast" do
         place = build(:place, lat: amsterdam_groenelaan[:lat], lng: amsterdam_groenelaan[:lng])
         place.save!
-        expect(place.forecast).to eq(forecast)
+        expect(place.forecast).to(eq(forecast))
       end
     end
 
@@ -33,7 +35,7 @@ RSpec.describe Place, type: :model do
       it "creates a new forecast" do
         place = build(:place, lat: amsterdam_hofland[:lat], lng: amsterdam_hofland[:lng])
         place.save!
-        expect(place.forecast.lat).to eq(amsterdam_hofland[:lat])
+        expect(place.forecast.lat).to(eq(amsterdam_hofland[:lat]))
       end
     end
   end

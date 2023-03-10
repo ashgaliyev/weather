@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Guest
   attr_accessor :session
 
@@ -15,7 +17,7 @@ class Guest
   end
 
   def temp_unit
-    session[:temp_unit] || 'c'
+    session[:temp_unit] || "c"
   end
 
   def update_temp_unit(temp_unit)

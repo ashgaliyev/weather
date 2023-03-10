@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-require 'spec_helper'
-ENV['RAILS_ENV'] ||= 'test'
-require_relative '../config/environment'
+require "spec_helper"
+ENV["RAILS_ENV"] ||= "test"
+require_relative "../config/environment"
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
-require 'rspec/rails'
-require 'capybara/rails'
-require 'capybara/rspec'
-require 'webdrivers'
-require 'webmock/rspec'
+require "rspec/rails"
+require "capybara/rails"
+require "capybara/rspec"
+require "webdrivers"
+require "webmock/rspec"
 require "sidekiq/testing"
 
 Sidekiq::Testing.inline!
@@ -29,14 +31,14 @@ WebMock.disable_net_connect!(allow_localhost: true)
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |f| require f }
 
-Capybara.register_driver :selenium_chrome do |app|
+Capybara.register_driver(:selenium_chrome) do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    "goog:loggingPrefs" => { browser: "INFO", driver: "WARNING" },
-    "goog:chromeOptions" => { args: ["headless", "disable-gpu"], w3c: false },
+    'goog:loggingPrefs': { browser: "INFO", driver: "WARNING" },
+    'goog:chromeOptions': { args: %w[headless disable-gpu], w3c: false }
   )
-  Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
+  Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
 end
 
 Capybara.javascript_driver = :selenium_chrome_headless
@@ -48,17 +50,17 @@ Capybara.run_server = true
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
-  abort e.to_s.strip
+  abort(e.to_s.strip)
 end
 RSpec.configure do |config|
   include PlaceHelpers
 
-  config.before(:each) do
-    stub_request(:get, /api.openweathermap.org\/data\/2.5\/weather/)
-    .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "weather.json")), headers: {})
+  config.before do
+    stub_request(:get, %r{api.openweathermap.org/data/2.5/weather}).
+      to_return(status: 200, body: Rails.root.join("spec", "fixtures", "weather.json").read, headers: {})
 
-    stub_request(:get, /api.openweathermap.org\/data\/2.5\/forecast/)
-      .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "forecast.json")), headers: {})
+    stub_request(:get, %r{api.openweathermap.org/data/2.5/forecast}).
+      to_return(status: 200, body: Rails.root.join("spec", "fixtures", "forecast.json").read, headers: {})
   end
 
   config.before(:each, type: :system) do
@@ -66,17 +68,17 @@ RSpec.configure do |config|
   end
 
   config.after(:each, type: :system) do
-    console_errors = page.driver.browser.manage.logs.get(:browser).select {|m| m.level == 'SEVERE'}
+    console_errors = page.driver.browser.manage.logs.get(:browser).select { |m| m.level == "SEVERE" }
     console_errors.each do |error|
       # skip beginning of the error message until \" found
-      msg = error.message[/\".*$/]
-      next if msg.include?('Google Maps JavaScript API error: RefererNotAllowedMapError')
+      msg = error.message[/".*$/]
+      next if msg.nil? || msg.include?('Google Maps JavaScript API error: RefererNotAllowedMapError')
 
-      expect(msg).to eq('') # just to print the error
+      expect(msg).to(eq("")) # just to print the error
     end
   end
 
-  config.include FactoryBot::Syntax::Methods
+  config.include(FactoryBot::Syntax::Methods)
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   # config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -104,7 +106,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   # Filter lines from Rails gems in backtraces.
-  config.filter_rails_from_backtrace!
+  # config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 end
