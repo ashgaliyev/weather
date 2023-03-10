@@ -15,4 +15,8 @@ class User < ApplicationRecord
     saved_ids = places.pluck(:id)
     self.places = Place.where(id: (ids + saved_ids).uniq)
   end
+
+  def update_temp_unit(temp_unit)
+    update(temp_unit: temp_unit)
+  end
 end

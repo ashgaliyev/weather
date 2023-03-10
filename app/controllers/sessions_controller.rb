@@ -13,4 +13,9 @@ class SessionsController < ApplicationController
     session[:user_id] = nil
     redirect_to root_path
   end
+
+  def update_temp_unit
+    current_user.update_temp_unit(params[:temp_unit])
+    render json: { message: 'Temp unit updated' }
+  end
 end

@@ -8,4 +8,12 @@ class Guest
   def places
     Place.where(id: session[:places])
   end
+
+  def temp_unit
+    session[:temp_unit] || 'c'
+  end
+
+  def update_temp_unit(temp_unit)
+    session[:temp_unit] = temp_unit
+  end
 end
