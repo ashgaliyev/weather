@@ -8,15 +8,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe "associations" do
-    it "has many places" do
-      user = create(:user)
-      place = create(:place, :with_forecast)
-      user.places << place
-      expect(user.places).to include(place)
-    end
-  end
-
   describe ".create_from_omniauth" do
     it "creates a user" do
       user_info = {

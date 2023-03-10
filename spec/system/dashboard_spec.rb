@@ -3,14 +3,6 @@
 require "rails_helper"
 
 RSpec.describe 'Dashboard screen', type: :system do
-  before do
-    stub_request(:get, /api.openweathermap.org\/data\/2.5\/weather/)
-      .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "weather.json")), headers: {})
-
-    stub_request(:get, /api.openweathermap.org\/data\/2.5\/forecast/)
-      .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "forecast.json")), headers: {})
-  end
-
   it 'shows the dashboard screen' do
     visit root_path
     expect(page).to have_content("My Places")
@@ -51,6 +43,19 @@ RSpec.describe 'Dashboard screen', type: :system do
     expect(page).to have_content("Amsterdam2")
   end
 
+  it 'deletes a place' do
+    create_place
+
+    visit root_path
+
+    find("[data-test-id='place-card']").click
+    find("[data-test-id='delete-place']").click
+  
+    page.driver.browser.switch_to.alert.accept
+
+    expect(page).to have_current_path(root_path)
+    expect(page).to_not have_content("Amsterdam")
+  end
 
   def create_place
     visit root_path

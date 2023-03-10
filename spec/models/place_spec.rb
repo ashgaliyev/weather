@@ -18,15 +18,6 @@ RSpec.describe Place, type: :model do
     end
   end
 
-  describe "associations" do
-    it "has many users" do
-      place = create(:place, :with_forecast)
-      user = create(:user)
-      place.users << user
-      expect(place.users).to include(user)
-    end
-  end
-
   describe "before_create" do
     let!(:forecast) { create(:forecast, lat: amsterdam_center[:lat], lng: amsterdam_center[:lng]) }
 

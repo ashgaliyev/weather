@@ -33,7 +33,8 @@ Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f 
 
 Capybara.register_driver :selenium_chrome do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    "goog:loggingPrefs" => { browser: "INFO", driver: "WARNING" }
+    "goog:loggingPrefs" => { browser: "INFO", driver: "WARNING" },
+    "goog:chromeOptions" => { args: ["headless", "disable-gpu"], w3c: false },
   )
   Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
 end
@@ -52,6 +53,14 @@ end
 RSpec.configure do |config|
   include PlaceHelpers
 
+  config.before(:each) do
+    stub_request(:get, /api.openweathermap.org\/data\/2.5\/weather/)
+    .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "weather.json")), headers: {})
+
+    stub_request(:get, /api.openweathermap.org\/data\/2.5\/forecast/)
+      .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "forecast.json")), headers: {})
+  end
+
   config.before(:each, type: :system) do
     driven_by :selenium_chrome
   end
@@ -61,6 +70,7 @@ RSpec.configure do |config|
     console_errors.each do |error|
       # skip beginning of the error message until \" found
       msg = error.message[/\".*$/]
+      next if msg.include?('Google Maps JavaScript API error: RefererNotAllowedMapError')
 
       expect(msg).to eq('') # just to print the error
     end
