@@ -50,4 +50,7 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  # https://github.com/tailwindlabs/tailwindcss/discussions/6738#discussioncomment-2010199
+  config.assets.css_compressor = nil
 end

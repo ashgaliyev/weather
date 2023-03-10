@@ -5,6 +5,15 @@ require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
+require 'capybara/rails'
+require 'capybara/rspec'
+require 'webdrivers'
+require 'webmock/rspec'
+require "sidekiq/testing"
+
+Sidekiq::Testing.inline!
+WebMock.disable_net_connect!(allow_localhost: true)
+
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -22,6 +31,17 @@ require 'rspec/rails'
 #
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
+Capybara.register_driver :selenium_chrome do |app|
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    "goog:loggingPrefs" => { browser: "INFO", driver: "WARNING" }
+  )
+  Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
+end
+
+Capybara.javascript_driver = :selenium_chrome_headless
+Capybara.server = :puma, { Silent: true }
+Capybara.run_server = true
+
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
 begin
@@ -31,6 +51,21 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 RSpec.configure do |config|
   include PlaceHelpers
+
+  config.before(:each, type: :system) do
+    driven_by :selenium_chrome
+  end
+
+  config.after(:each, type: :system) do
+    console_errors = page.driver.browser.manage.logs.get(:browser).select {|m| m.level == 'SEVERE'}
+    console_errors.each do |error|
+      # skip beginning of the error message until \" found
+      msg = error.message[/\".*$/]
+
+      expect(msg).to eq('') # just to print the error
+    end
+  end
+
   config.include FactoryBot::Syntax::Methods
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   # config.fixture_path = "#{::Rails.root}/spec/fixtures"
