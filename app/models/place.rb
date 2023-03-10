@@ -10,6 +10,8 @@ class Place < ApplicationRecord
   validates :lng, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
 
   before_create :set_forecast
+  after_update :set_forecast
+  after_destroy :destroy_forecast
 
   def set_forecast
     forecast = Forecast.within(10, origin: [lat, lng]).first
@@ -18,5 +20,9 @@ class Place < ApplicationRecord
     else
       self.forecast = Forecast.create(lat: lat, lng: lng)
     end
+  end
+
+  def destroy_forecast
+    forecast.destroy if forecast.places.empty?
   end
 end
