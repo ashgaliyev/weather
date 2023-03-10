@@ -16,10 +16,12 @@ const LABEL = {
 };
 
 const PlaceForm = ({ onSubmit, place }) => {
+  const placeIsSet = place !== undefined;
+
   const [form, setForm] = useState({
-    name: place === undefined ? "" : place.name,
-    lat: place === undefined ? "" : place.lat,
-    lng: place === undefined ? "" : place.lng,
+    name: placeIsSet ? place.name : "",
+    lat: placeIsSet ? place.lat : "",
+    lng: placeIsSet ? place.lng : "",
   });
 
   const [invalidFields, setInvalidFields] = useState({
@@ -46,7 +48,7 @@ const PlaceForm = ({ onSubmit, place }) => {
 
   const handleFormSubmit = () => {
     const { name, lat, lng } = form;
-    if (place !== undefined) {
+    if (placeIsSet) {
       updatePlace({
         id: place.id,
         name,
@@ -100,7 +102,7 @@ const PlaceForm = ({ onSubmit, place }) => {
                 value={value}
                 onChange={handleInputChange}
               />
-              {invalidFields[key] !== null && (
+              {invalidFields[key] && (
                 <span className="text-red-500 text-sm">
                   {invalidFields[key].join(", ")}
                 </span>
@@ -113,21 +115,21 @@ const PlaceForm = ({ onSubmit, place }) => {
           <button
             className="bg-blue-500 text-white p-2 rounded"
             type="submit"
-            data-test-id={place === undefined ? "create-place" : "update-place"}
+            data-test-id="submit-place"
           >
-            {place === undefined ? "Create" : "Update"}
+            {placeIsSet ? "Update" : "Create"}
           </button>
         </div>
       </form>
       <Map
         onGeocode={handleGeoCode}
         defaultCenter={
-          place === undefined
-            ? null
-            : {
+          placeIsSet
+            ? {
                 lat: place.lat,
                 lng: place.lng,
               }
+            : null
         }
       />
     </div>

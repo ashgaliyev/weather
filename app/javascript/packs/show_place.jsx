@@ -33,17 +33,18 @@ const ShowPlace = (props) => {
       topBlockLeft={
         <Navigation
           links={[
-            { name: "← Back", url: "/" },
+            { name: "← Back", url: buildUrl.rootUrl() },
             {
               name: "Edit",
               url: buildUrl.editPlaceUrl(props.place.id),
             },
             {
               name: "Delete",
+              dataTestId: "delete-place",
               onClick: () => {
                 if (confirm("Are you sure?")) {
                   deletePlace(props.place).then(() => {
-                    window.location.href = "/";
+                    window.location.href = buildUrl.rootUrl();
                   });
                 }
               },

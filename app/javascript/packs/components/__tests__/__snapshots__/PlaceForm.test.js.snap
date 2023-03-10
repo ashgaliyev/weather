@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlaceForm when place not provided renders correctly 1`] = `
+<div
+  className="w-full flex flex-col"
+>
+  <form
+    className="flex flex-row mb-5"
+    onSubmit={[Function]}
+  >
+    <div
+      className="flex flex-col mr-3"
+    >
+      <label
+        htmlFor="name"
+      >
+        Name
+      </label>
+      <input
+        id="name"
+        name="name"
+        onChange={[Function]}
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="flex flex-col mr-3"
+    >
+      <label
+        htmlFor="lat"
+      >
+        Latitude
+      </label>
+      <input
+        id="lat"
+        name="lat"
+        onChange={[Function]}
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="flex flex-col mr-3"
+    >
+      <label
+        htmlFor="lng"
+      >
+        Longitude
+      </label>
+      <input
+        id="lng"
+        name="lng"
+        onChange={[Function]}
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="flex flex-col justify-start mt-6"
+    >
+      <button
+        className="bg-blue-500 text-white p-2 rounded"
+        data-test-id="submit-place"
+        type="submit"
+      >
+        Create
+      </button>
+    </div>
+  </form>
+  <span>
+    No API key provided
+  </span>
+</div>
+`;
+
+exports[`PlaceForm when place provided renders correctly 1`] = `
+<div
+  className="w-full flex flex-col"
+>
+  <form
+    className="flex flex-row mb-5"
+    onSubmit={[Function]}
+  >
+    <div
+      className="flex flex-col mr-3"
+    >
+      <label
+        htmlFor="name"
+      >
+        Name
+      </label>
+      <input
+        id="name"
+        name="name"
+        onChange={[Function]}
+        type="text"
+        value="Paris"
+      />
+    </div>
+    <div
+      className="flex flex-col mr-3"
+    >
+      <label
+        htmlFor="lat"
+      >
+        Latitude
+      </label>
+      <input
+        id="lat"
+        name="lat"
+        onChange={[Function]}
+        type="text"
+        value={48.8566}
+      />
+    </div>
+    <div
+      className="flex flex-col mr-3"
+    >
+      <label
+        htmlFor="lng"
+      >
+        Longitude
+      </label>
+      <input
+        id="lng"
+        name="lng"
+        onChange={[Function]}
+        type="text"
+        value={2.3522}
+      />
+    </div>
+    <div
+      className="flex flex-col justify-start mt-6"
+    >
+      <button
+        className="bg-blue-500 text-white p-2 rounded"
+        data-test-id="submit-place"
+        type="submit"
+      >
+        Update
+      </button>
+    </div>
+  </form>
+  <span>
+    No API key provided
+  </span>
+</div>
+`;

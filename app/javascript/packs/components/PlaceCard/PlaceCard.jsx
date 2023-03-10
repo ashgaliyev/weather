@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import React, { useContext } from "react";
+import React from "react";
 import { SettingsContext } from "../SettingsProvider";
 import placeholder from "./icon_placeholder.png";
 import { weatherShape } from "../../utils/types";
@@ -21,7 +21,7 @@ const PlaceCard = ({ heading, weather, onClick }) => {
 
   const { tempMin, tempMax, windSpeed, icon, description, date } = weather;
 
-  const { tempType } = useContext(SettingsContext);
+  const { tempType } = React.useContext(SettingsContext);
 
   const tempMinC = Math.round(tempMin - 273.15);
   const tempMaxC = Math.round(tempMax - 273.15);

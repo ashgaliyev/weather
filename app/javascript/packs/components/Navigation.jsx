@@ -17,6 +17,7 @@ const Navigation = ({ links }) => (
                 link.onClick();
               }
             }}
+            data-test-id={link.dataTestId || ""}
           >
             {link.name}
           </span>

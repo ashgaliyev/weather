@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import GoogleMapReact from "google-map-react";
 import GooglePlacesAutocomplete, {
@@ -20,7 +20,11 @@ const propTypes = {
 };
 
 const Map = ({ onGeocode, defaultCenter }) => {
-  const { mapApiKey } = useContext(SettingsContext);
+  const { mapApiKey } = React.useContext(SettingsContext);
+  if (mapApiKey === null) {
+    return <span>No API key provided</span>;
+  }
+
   const [center, setCenter] = useState(defaultCenter);
   const [zoom, setZoom] = useState(11);
   const [marker, setMarker] = useState(null);
@@ -80,7 +84,7 @@ const Map = ({ onGeocode, defaultCenter }) => {
   };
 
   useEffect(() => {
-    if (defaultCenter !== null) {
+    if (defaultCenter) {
       return;
     }
     if (navigator.geolocation) {
