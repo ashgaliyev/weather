@@ -6,6 +6,9 @@ class Place < ApplicationRecord
   validates :lat, presence: true
   validates :lng, presence: true
 
+  validates :lat, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
+  validates :lng, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
+
   before_create :set_forecast
 
   def set_forecast
