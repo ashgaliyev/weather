@@ -24,3 +24,10 @@ export const placeShape = PropTypes.shape({
   forecastId: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
 });
+
+export const placeFormShape = PropTypes.shape({
+  id: PropTypes.number,
+  name: PropTypes.string,
+  lat: PropTypes.number,
+  lng: PropTypes.number,
+});

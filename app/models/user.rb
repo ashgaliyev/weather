@@ -10,6 +10,10 @@ class User < ApplicationRecord
     )
   end
 
+  def add_place(place)
+    places << place
+  end
+
   def save_places(ids)
     return if ids.nil?
     saved_ids = places.pluck(:id)

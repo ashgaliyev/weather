@@ -9,4 +9,6 @@ Rails.application.routes.draw do
 
   get '/forecasts/current', to: 'forecasts#current'
   get '/forecasts/five_days/:place_id', to: 'forecasts#five_days'
+
+  resources :places
 end

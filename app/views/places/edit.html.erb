@@ -1,0 +1,10 @@
+<% content_for :props do %>
+<script>
+  window.props = "<%= j render(partial: 'places/place', locals: { place: @place }, formats: :json).html_safe %>";
+  window.settings = "<%= j render(partial: 'settings', formats: :json).html_safe %>";
+</script>
+<% end %>
+
+<% content_for :scripts do %>
+  <%= javascript_pack_tag 'edit_place' %>
+<% end %>

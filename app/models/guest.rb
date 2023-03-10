@@ -9,6 +9,11 @@ class Guest
     Place.where(id: session[:places])
   end
 
+  def add_place(place)
+    session[:places] ||= []
+    session[:places] << place.id
+  end
+
   def temp_unit
     session[:temp_unit] || 'c'
   end
