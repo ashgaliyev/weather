@@ -89,6 +89,8 @@ GEM
       dotenv (= 2.8.1)
       railties (>= 3.2)
     erubi (1.12.0)
+    et-orbi (1.2.7)
+      tzinfo
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -101,6 +103,9 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
     ffi (1.15.5)
+    fugit (1.8.1)
+      et-orbi (~> 1, >= 1.2.7)
+      raabro (~> 1.4)
     geokit (1.14.0)
     geokit-rails (2.5.0)
       geokit (~> 1.5)
@@ -171,6 +176,7 @@ GEM
     public_suffix (5.0.1)
     puma (5.6.5)
       nio4r (~> 2.0)
+    raabro (1.4.0)
     racc (1.6.2)
     rack (2.2.6.3)
     rack-mini-profiler (2.3.4)
@@ -251,6 +257,9 @@ GEM
       connection_pool (>= 2.2.5)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
+    sidekiq-cron (1.9.1)
+      fugit (~> 1.8)
+      sidekiq (>= 4.2.1)
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
@@ -319,6 +328,7 @@ DEPENDENCIES
   rspec-rails (~> 6.0.0)
   sass-rails (>= 6)
   sidekiq
+  sidekiq-cron (~> 1.5)
   spring
   tailwindcss-rails (~> 2.0)
   tzinfo-data

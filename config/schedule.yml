@@ -1,0 +1,4 @@
+update_weather:
+  cron: "0 * * * *"
+  class: "UpdateWeatherJob"
+  queue: default
