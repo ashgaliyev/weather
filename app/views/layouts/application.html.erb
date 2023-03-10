@@ -12,20 +12,28 @@
   </head>
 
   <body class="bg-slate-500">
-    <div class="container mx-auto mt-8 px-5 flex">
-      <% if user_logged_in? %>
-        <span><%= current_user.name %></span>
-        <br />
-        <%= link_to 'Logout', logout_path, method: :delete %>
-      <% else %>
-        <span>Guest</span>
-        <br />
-        <%= link_to 'Login', login_path %>
-      <% end %>
+    <div class="container mx-auto mt-8 justify-between flex flex-row mb-2">
+      <div class="text-white text-2xl font-bold">
+        Weather Tracker
+      </div>
+      <div class="justify-end flex mb-2 items-center">
+        <% if user_logged_in? %>
+          <span class="text-white border-r pr-3 mr-3"><%= current_user.name %></span>
+          <a href="<%= logout_path %>" class="btn-primary" data-method="delete">Logout</a>
+        <% else %>
+          <span class="text-white border-r pr-3 mr-3">Guest</span>
+          <a href="<%= login_path %>" class="btn-primary">Login</a>
+        <% end %>
+      </div>
     </div>
     <main class="container mx-auto p-5 flex bg-slate-50 rounded shadow">
       <%= yield %>
     </main>
+    <footer class="container mx-auto mb-3">
+      <div class="text-center text-white text-sm mt-4">
+        &copy; 2023 Weather Tracker
+      </div>
+    </footer>
     <%= yield :scripts %>
   </body>
 </html>
