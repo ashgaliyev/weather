@@ -8,7 +8,11 @@ import { weatherShape } from "../../utils/types";
 const PlaceCard = ({ heading, weather, onClick }) => {
   if (!weather)
     return (
-      <div className="bg-white rounded-lg shadow-lg flex flex-row p-4 pl-0 max-w-sm">
+      <div
+        className="bg-white rounded-lg shadow-lg flex flex-row p-4 pl-0 max-w-sm hover:cursor-pointer"
+        onClick={onClick}
+        data-test-id="place-card"
+      >
         <div className="flex-none w-24">
           <img src={placeholder} alt="No data" />
         </div>
@@ -19,7 +23,7 @@ const PlaceCard = ({ heading, weather, onClick }) => {
       </div>
     );
 
-  const { tempMin, tempMax, windSpeed, icon, description, date } = weather;
+  const { tempMin, tempMax, windSpeed, icon, description } = weather;
 
   const { tempType } = React.useContext(SettingsContext);
 
@@ -50,9 +54,6 @@ const PlaceCard = ({ heading, weather, onClick }) => {
         <div className="text-2xl">{heading.slice(0, 20)}</div>
         <span>{tempRange}</span>
         <div>{windSpeed} m/s</div>
-        {date ? (
-          <div className="text-xs text-right text-slate-400">{date}</div>
-        ) : null}
       </div>
     </div>
   );

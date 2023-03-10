@@ -38,7 +38,7 @@ RSpec.describe 'Dashboard screen', type: :system do
     click_on 'Edit'
     expect(page).to have_current_path(edit_place_path(Place.last))
     fill_in "name", with: "Amsterdam2"
-    find("[data-test-id='update-place']").click
+    find("[data-test-id='submit-place']").click
     expect(page).to have_current_path(root_path)
     expect(page).to have_content("Amsterdam2")
   end
@@ -57,6 +57,19 @@ RSpec.describe 'Dashboard screen', type: :system do
     expect(page).to_not have_content("Amsterdam")
   end
 
+  it 'allows to see place with no forecast' do
+    create_place
+
+    Forecast.last.update(current: nil, five_days: nil)
+
+    visit root_path
+
+    find("[data-test-id='place-card']").click
+    expect(page).to have_current_path(place_path(Place.last))
+    expect(page).to have_content("Amsterdam")
+    expect(page).to have_content("No forecast available.")
+  end
+
   def create_place
     visit root_path
     find("[data-test-id='add-place']").click
@@ -67,7 +80,7 @@ RSpec.describe 'Dashboard screen', type: :system do
     fill_in "lat", with: "52.370216"
     fill_in "lng", with: "4.895168"
     
-    find("[data-test-id='create-place']").click
+    find("[data-test-id='submit-place']").click
     expect(page).to have_current_path(root_path)
   end
 end

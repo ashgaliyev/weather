@@ -18,6 +18,7 @@ const Navigation = ({ links }) => (
               }
             }}
             data-test-id={link.dataTestId || ""}
+            className="hover:cursor-pointer"
           >
             {link.name}
           </span>

@@ -12,21 +12,6 @@ import renderApp from "./utils/renderApp";
 const ShowPlace = (props) => {
   const { buildUrl } = React.useContext(SettingsContext);
 
-  const days = props.forecast.fiveDays.reduce((acc, weather) => {
-    const date = new Date(weather.date);
-    date.setHours(0, 0, 0, 0);
-    const day = date.toISOString();
-    if (!acc[day]) {
-      acc[day] = [];
-    }
-    acc[day].push(weather);
-    return acc;
-  }, {});
-
-  const sortedDays = Object.keys(days).sort((a, b) => {
-    return new Date(a) - new Date(b);
-  });
-
   return (
     <Page
       heading={props.place.name}
@@ -53,47 +38,63 @@ const ShowPlace = (props) => {
         />
       }
       topBlockRight={<TempSwitcher />}
-      content={
-        <>
-          {sortedDays.map((day) => {
-            const date = new Date(day);
-            const formattedDate = date.toLocaleDateString("en-GB", {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-            });
+      content={(() => {
+        if (!props.forecast.fiveDays) {
+          return <div>No forecast available.</div>;
+        }
 
-            return (
-              <div key={day}>
-                <h2>{formattedDate}</h2>
-                <div
-                  className="grid gap-4"
-                  style={{
-                    gridTemplateColumns:
-                      "repeat(auto-fill, minmax(360px, 1fr))",
-                  }}
-                >
-                  {days[day].map((weather, i) => {
-                    const time = new Date(weather.date);
-                    const formattedTime = time.toLocaleTimeString("en-GB", {
-                      hour: "numeric",
-                      minute: "numeric",
-                    });
+        const days = props.forecast.fiveDays.reduce((acc, weather) => {
+          const date = new Date(weather.date);
+          date.setHours(0, 0, 0, 0);
+          const day = date.toISOString();
+          if (!acc[day]) {
+            acc[day] = [];
+          }
+          acc[day].push(weather);
+          return acc;
+        }, {});
 
-                    return (
-                      <PlaceCard
-                        key={i}
-                        heading={formattedTime}
-                        weather={weather}
-                      />
-                    );
-                  })}
-                </div>
+        const sortedDays = Object.keys(days).sort((a, b) => {
+          return new Date(a) - new Date(b);
+        });
+
+        return sortedDays.map((day) => {
+          const date = new Date(day);
+          const formattedDate = date.toLocaleDateString("en-GB", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+          });
+
+          return (
+            <div key={day}>
+              <h2>{formattedDate}</h2>
+              <div
+                className="grid gap-4"
+                style={{
+                  gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))",
+                }}
+              >
+                {days[day].map((weather, i) => {
+                  const time = new Date(weather.date);
+                  const formattedTime = time.toLocaleTimeString("en-GB", {
+                    hour: "numeric",
+                    minute: "numeric",
+                  });
+
+                  return (
+                    <PlaceCard
+                      key={i}
+                      heading={formattedTime}
+                      weather={weather}
+                    />
+                  );
+                })}
               </div>
-            );
-          })}
-        </>
-      }
+            </div>
+          );
+        });
+      })()}
     />
   );
 };
