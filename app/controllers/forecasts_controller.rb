@@ -1,6 +1,6 @@
 class ForecastsController < ApplicationController
   def current
-    @places = current_user.places.includes(:forecast)
+    @places = current_user.places.includes(:forecast).order(:id)
     @forecasts = @places.map(&:forecast)
   end
 

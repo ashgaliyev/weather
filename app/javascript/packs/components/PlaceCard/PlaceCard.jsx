@@ -3,17 +3,24 @@ import PropTypes from "prop-types";
 import React, { useContext } from "react";
 import { TempContext } from "../TempProvider";
 import placeholder from "./icon_placeholder.png";
+import { weatherShape } from "../../utils/types";
 
-const PlaceCard = ({
-  heading,
-  tempMin,
-  tempMax,
-  windSpeed,
-  weatherIcon,
-  weatherDescription,
-  dateUpdated,
-  onClick,
-}) => {
+const PlaceCard = ({ heading, weather, onClick }) => {
+  if (!weather)
+    return (
+      <div className="bg-white rounded-lg shadow-lg flex flex-row p-4 pl-0 max-w-sm">
+        <div className="flex-none w-24">
+          <img src={placeholder} alt="No data" />
+        </div>
+        <div className="flex-1 w-32">
+          <div className="text-2xl">{heading.slice(0, 20)}</div>
+          <div className="text-xs text-right text-slate-400">Updating...</div>
+        </div>
+      </div>
+    );
+
+  const { tempMin, tempMax, windSpeed, icon, description, date } = weather;
+
   const { tempType } = useContext(TempContext);
 
   const tempMinC = Math.round(tempMin - 273.15);
@@ -29,32 +36,22 @@ const PlaceCard = ({
 
   return (
     <div
-      class="bg-white rounded-lg shadow-lg flex flex-row p-4 pl-0 max-w-sm"
+      className="bg-white rounded-lg shadow-lg flex flex-row p-4 pl-0 max-w-sm hover:cursor-pointer"
       onClick={onClick}
     >
-      <div>
-        {weatherIcon ? (
-          <img
-            src={`https://openweathermap.org/img/wn/${weatherIcon}@2x.png`}
-            alt={weatherDescription}
-          />
-        ) : (
-          <img src={placeholder} alt="No data" />
-        )}
+      <div className="flex-none w-24">
+        <img
+          src={`https://openweathermap.org/img/wn/${icon}@2x.png`}
+          alt={description}
+        />
       </div>
-      <div>
-        <div class="text-2xl">{heading}</div>
-        {tempMax && tempMin && windSpeed ? (
-          <>
-            <d>{tempRange}</d>
-            <div>{windSpeed} m/s</div>
-            {dateUpdated ? (
-              <div class="text-xs text-right text-slate-400">{dateUpdated}</div>
-            ) : null}
-          </>
-        ) : (
-          <div class="text-xs text-right text-slate-400">Updating...</div>
-        )}
+      <div className="flex-1 w-32">
+        <div className="text-2xl">{heading.slice(0, 20)}</div>
+        <span>{tempRange}</span>
+        <div>{windSpeed} m/s</div>
+        {date ? (
+          <div className="text-xs text-right text-slate-400">{date}</div>
+        ) : null}
       </div>
     </div>
   );
@@ -62,13 +59,8 @@ const PlaceCard = ({
 
 PlaceCard.propTypes = {
   heading: PropTypes.string.isRequired,
-  tempMax: PropTypes.number,
-  tempMin: PropTypes.number,
-  windSpeed: PropTypes.number,
-  weatherIcon: PropTypes.string,
-  weatherDescription: PropTypes.string,
-  dateUpdated: PropTypes.string,
   onClick: PropTypes.func,
+  weather: weatherShape,
 };
 
 export default PlaceCard;

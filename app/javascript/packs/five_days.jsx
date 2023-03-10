@@ -2,9 +2,12 @@ import ReactDOM from "react-dom";
 import * as React from "react";
 import PropTypes from "prop-types";
 import { fiveDaysForecastShape, placeShape } from "./utils/types";
+import { deletePlace } from "./api";
 import PlaceCard from "./components/PlaceCard/PlaceCard";
 import TempProvider from "./components/TempProvider";
 import TempSwitcher from "./components/TempSwitcher/TempSwitcher";
+import Page from "./components/Page";
+import Navigation from "./components/Navigation";
 
 const FiveDays = (props) => {
   const days = props.forecast.fiveDays.reduce((acc, weather) => {
@@ -23,11 +26,33 @@ const FiveDays = (props) => {
   });
 
   return (
-    <>
-      <TempProvider>
-        <div className="flex flex-col w-full">
-          <TempSwitcher />
-          <h1>{props.place.name}</h1>
+    <Page
+      heading={props.place.name}
+      tempUnit={props.tempUnit}
+      topBlockLeft={
+        <Navigation
+          links={[
+            { name: "← Back", url: "/" },
+            {
+              name: "Edit",
+              url: `/places/${props.place.id}/edit`,
+            },
+            {
+              name: "Delete",
+              onClick: () => {
+                if (confirm("Are you sure?")) {
+                  deletePlace(props.place).then(() => {
+                    window.location.href = "/";
+                  });
+                }
+              },
+            },
+          ]}
+        />
+      }
+      topBlockRight={<TempSwitcher />}
+      content={
+        <>
           {sortedDays.map((day) => {
             const date = new Date(day);
             const formattedDate = date.toLocaleDateString("en-GB", {
@@ -57,11 +82,7 @@ const FiveDays = (props) => {
                       <PlaceCard
                         key={i}
                         heading={formattedTime}
-                        tempMax={weather.tempMax}
-                        tempMin={weather.tempMin}
-                        windSpeed={weather.windSpeed}
-                        weatherIcon={weather.icon}
-                        weatherDescription={weather.description}
+                        weather={weather}
                       />
                     );
                   })}
@@ -69,9 +90,9 @@ const FiveDays = (props) => {
               </div>
             );
           })}
-        </div>
-      </TempProvider>
-    </>
+        </>
+      }
+    />
   );
 };
 
@@ -79,13 +100,15 @@ FiveDays.propTypes = {
   weatherType: PropTypes.string.isRequired,
   forecast: fiveDaysForecastShape,
   place: placeShape,
+  tempUnit: PropTypes.string.isRequired,
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   const props = JSON.parse(window.props);
+  const settings = JSON.parse(window.settings);
 
   ReactDOM.render(
-    <FiveDays {...props} />,
+    <FiveDays {...props} {...settings} />,
     document.getElementsByTagName("main")[0]
   );
 });

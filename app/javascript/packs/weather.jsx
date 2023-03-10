@@ -1,11 +1,13 @@
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import * as React from "react";
 import PropTypes from "prop-types";
 import { currentForecastShape, placeShape } from "./utils/types";
+import Page from "./components/Page";
 import PlaceCard from "./components/PlaceCard/PlaceCard";
 import TempProvider from "./components/TempProvider";
 import TempSwitcher from "./components/TempSwitcher/TempSwitcher";
 import AddPlace from "./components/AddPlace";
+import EmptyPlaces from "./components/EmptyPlaces";
 
 const Weather = (props) => {
   const places = props.places.map((place) => {
@@ -16,29 +18,17 @@ const Weather = (props) => {
   });
 
   return (
-    <>
-      <TempProvider>
-        <div className="flex flex-col w-full">
+    <Page
+      heading={"My Places"}
+      topBlockLeft={null}
+      topBlockRight={<TempSwitcher />}
+      tempUnit={props.tempUnit}
+      content={
+        <>
           {places.length === 0 ? (
-            <>
-              <div class="flex flex-col items-center justify-center my-10">
-                <span class="text-2xl mb-5">
-                  You have no places added. Add a place to get started.
-                </span>
-                <div
-                  className="grid gap-4"
-                  style={{
-                    gridTemplateColumns:
-                      "repeat(auto-fill, minmax(360px, 1fr))",
-                  }}
-                >
-                  <AddPlace />
-                </div>
-              </div>
-            </>
+            <EmptyPlaces />
           ) : (
             <>
-              <TempSwitcher />
               <div
                 className="grid gap-4"
                 style={{
@@ -49,24 +39,23 @@ const Weather = (props) => {
                   <PlaceCard
                     key={id}
                     heading={name}
-                    tempMax={weather.tempMax}
-                    tempMin={weather.tempMin}
-                    windSpeed={weather.windSpeed}
-                    weatherIcon={weather.icon}
-                    weatherDescription={weather.description}
-                    dateUpdated={weather.date}
+                    weather={weather}
                     onClick={() => {
                       window.location.href = `/forecasts/five_days/${id}`;
                     }}
                   />
                 ))}
-                <AddPlace />
+                <AddPlace
+                  onClick={() => {
+                    window.location.href = `/places/new`;
+                  }}
+                />
               </div>
             </>
           )}
-        </div>
-      </TempProvider>
-    </>
+        </>
+      }
+    />
   );
 };
 
@@ -74,13 +63,14 @@ Weather.propTypes = {
   weatherType: PropTypes.string.isRequired,
   forecasts: PropTypes.arrayOf(currentForecastShape),
   places: PropTypes.arrayOf(placeShape),
+  tempUnit: PropTypes.string.isRequired,
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   const props = JSON.parse(window.props);
+  const settings = JSON.parse(window.settings);
 
-  ReactDOM.render(
-    <Weather {...props} />,
-    document.getElementsByTagName("main")[0]
-  );
+  const container = document.getElementsByTagName("main")[0];
+  const root = createRoot(container);
+  root.render(<Weather {...props} {...settings} />);
 });
