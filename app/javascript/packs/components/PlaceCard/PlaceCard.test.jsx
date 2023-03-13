@@ -11,7 +11,7 @@ describe("PlaceCard", () => {
     it("renders correctly", () => {
       const props = {
         heading: "Paris",
-        onClick: jest.fn(),
+        onClick: jest.fn()
       };
 
       const tree = renderer.create(<PlaceCard {...props} />).toJSON();
@@ -30,8 +30,8 @@ describe("PlaceCard", () => {
           icon: "01d",
           description: "clear sky",
           windSpeed: 5,
-          date: "2023-05-01",
-        },
+          date: "2023-05-01"
+        }
       };
 
       const tree = renderer.create(<PlaceCard {...props} />).toJSON();

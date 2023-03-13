@@ -28,6 +28,6 @@ export const placeShape = PropTypes.shape({
 export const placeFormShape = PropTypes.shape({
   id: PropTypes.number,
   name: PropTypes.string,
-  lat: PropTypes.number,
-  lng: PropTypes.number,
+  lat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  lng: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 });

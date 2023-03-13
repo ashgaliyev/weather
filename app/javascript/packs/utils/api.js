@@ -8,20 +8,20 @@ const csrfToken = () => {
   return null;
 };
 
-export const createPlace = (place) =>
+export const createPlace = place =>
   new Promise((resolve, reject) => {
     axios({
       method: "POST",
       url: "/places",
-      data: { place: place },
+      data: { place },
       headers: {
-        "X-CSRF-Token": csrfToken(),
-      },
+        "X-CSRF-Token": csrfToken()
+      }
     })
-      .then((response) => {
+      .then(response => {
         resolve(response);
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.response.status === 422) {
           resolve(error.response);
         } else {
@@ -30,7 +30,7 @@ export const createPlace = (place) =>
       });
   });
 
-export const updatePlace = (place) =>
+export const updatePlace = place =>
   new Promise((resolve, reject) => {
     const { id, ...placeData } = place;
     axios({
@@ -38,13 +38,13 @@ export const updatePlace = (place) =>
       url: `/places/${id}`,
       data: { place: placeData },
       headers: {
-        "X-CSRF-Token": csrfToken(),
-      },
+        "X-CSRF-Token": csrfToken()
+      }
     })
-      .then((response) => {
+      .then(response => {
         resolve(response);
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.response.status === 422) {
           resolve(error.response);
         } else {
@@ -53,37 +53,37 @@ export const updatePlace = (place) =>
       });
   });
 
-export const deletePlace = (place) =>
+export const deletePlace = place =>
   new Promise((resolve, reject) => {
     axios({
       method: "DELETE",
       url: `/places/${place.id}`,
       headers: {
-        "X-CSRF-Token": csrfToken(),
-      },
+        "X-CSRF-Token": csrfToken()
+      }
     })
-      .then((response) => {
+      .then(response => {
         resolve(response);
       })
-      .catch((error) => {
+      .catch(error => {
         reject(error);
       });
   });
 
-export const updateTempUnit = (unit) =>
+export const updateTempUnit = unit =>
   new Promise((resolve, reject) => {
     axios({
       method: "PUT",
       url: "/update_temp_unit",
       data: { temp_unit: unit },
       headers: {
-        "X-CSRF-Token": csrfToken(),
-      },
+        "X-CSRF-Token": csrfToken()
+      }
     })
-      .then((response) => {
+      .then(response => {
         resolve(response);
       })
-      .catch((error) => {
+      .catch(error => {
         reject(error);
       });
   });

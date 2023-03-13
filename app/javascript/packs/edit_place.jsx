@@ -1,17 +1,17 @@
 import * as React from "react";
-import PropTypes from "prop-types";
 import PlaceForm from "./components/PlaceForm";
 import { placeFormShape } from "./utils/types";
 import Page from "./components/Page";
 import Navigation from "./components/Navigation";
 import { SettingsContext } from "./components/SettingsProvider";
 import renderApp from "./utils/renderApp";
+import { deletePlace } from "./utils/api";
 
-const EditPlace = (props) => {
+function EditPlace({ place }) {
   const { buildUrl } = React.useContext(SettingsContext);
   return (
     <Page
-      heading={"Edit place"}
+      heading="Edit place"
       topBlockLeft={
         <Navigation
           links={[
@@ -19,8 +19,9 @@ const EditPlace = (props) => {
             {
               name: "Delete",
               onClick: () => {
+                // eslint-disable-next-line no-restricted-globals, no-alert
                 if (confirm("Are you sure?")) {
-                  deletePlace(props.place).then(() => {
+                  deletePlace(place).then(() => {
                     window.location.href = buildUrl.rootUrl();
                   });
                 }
@@ -29,10 +30,9 @@ const EditPlace = (props) => {
           ]}
         />
       }
-      topBlockRight={null}
       content={
         <PlaceForm
-          place={props}
+          place={place}
           onSubmit={() => {
             window.location.href = buildUrl.rootUrl();
           }}
@@ -40,10 +40,10 @@ const EditPlace = (props) => {
       }
     />
   );
-};
+}
 
 EditPlace.propTypes = {
-  place: placeFormShape,
+  place: placeFormShape.isRequired,
 };
 
 renderApp(EditPlace);

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/no-array-index-key */
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Map from "./Map";
 import { createPlace, updatePlace } from "../utils/api";
@@ -15,14 +16,10 @@ const LABEL = {
   lng: "Longitude",
 };
 
-const PlaceForm = ({ onSubmit, place }) => {
-  const placeIsSet = place !== undefined;
+function PlaceForm({ onSubmit, place }) {
+  const placeIsSet = place.id !== null;
 
-  const [form, setForm] = useState({
-    name: placeIsSet ? place.name : "",
-    lat: placeIsSet ? place.lat : "",
-    lng: placeIsSet ? place.lng : "",
-  });
+  const [form, setForm] = useState({ ...place });
 
   const [invalidFields, setInvalidFields] = useState({
     name: null,
@@ -134,8 +131,16 @@ const PlaceForm = ({ onSubmit, place }) => {
       />
     </div>
   );
-};
+}
 
 PlaceForm.propTypes = propTypes;
+PlaceForm.defaultProps = {
+  place: {
+    id: null,
+    name: "",
+    lat: "",
+    lng: "",
+  },
+};
 
 export default PlaceForm;

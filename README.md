@@ -29,5 +29,7 @@ Keys:
 
 ## Tests
 
+- Run `RAILS_ENV=test rails webdrivers:chromedriver:update` to update the chromedriver
 - `bundle exec rspec`
 - `yarn test`
+- `yarn lint`

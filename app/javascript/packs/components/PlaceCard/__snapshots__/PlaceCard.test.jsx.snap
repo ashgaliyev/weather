@@ -5,6 +5,9 @@ exports[`PlaceCard when place has forecast renders correctly 1`] = `
   className="bg-white rounded-lg shadow-lg flex flex-row p-4 pl-0 max-w-sm hover:cursor-pointer"
   data-test-id="place-card"
   onClick={[MockFunction]}
+  onKeyDown={[MockFunction]}
+  role="button"
+  tabIndex={0}
 >
   <div
     className="flex-none w-24"
@@ -27,8 +30,7 @@ exports[`PlaceCard when place has forecast renders correctly 1`] = `
     </span>
     <div>
       5
-       
-      m/s
+       m/s
     </div>
   </div>
 </div>
@@ -39,6 +41,9 @@ exports[`PlaceCard when place has no forecast renders correctly 1`] = `
   className="bg-white rounded-lg shadow-lg flex flex-row p-4 pl-0 max-w-sm hover:cursor-pointer"
   data-test-id="place-card"
   onClick={[MockFunction]}
+  onKeyDown={[MockFunction]}
+  role="button"
+  tabIndex={0}
 >
   <div
     className="flex-none w-24"

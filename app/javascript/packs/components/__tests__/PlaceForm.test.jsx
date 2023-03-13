@@ -1,6 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import { cleanup, fireEvent, render, act } from "@testing-library/react";
+import { fireEvent, render, act } from "@testing-library/react";
 import PlaceForm from "../PlaceForm";
 import { createPlace } from "../../utils/api";
 
@@ -52,8 +52,8 @@ describe("PlaceForm", () => {
 
       const place = {
         name: "Paris",
-        lat: "48.8566",
-        lng: "2.3522",
+        lat: 48.8566,
+        lng: 2.3522,
       };
 
       createPlace.mockResolvedValue(
@@ -84,8 +84,8 @@ describe("PlaceForm", () => {
 
       const place = {
         name: "Paris",
-        lat: "48.8566",
-        lng: "2.3522",
+        lat: 48.8566,
+        lng: 2.3522,
       };
 
       createPlace.mockResolvedValue(

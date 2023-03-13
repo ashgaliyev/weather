@@ -2,7 +2,7 @@ import * as React from "react";
 import AddPlace from "./AddPlace";
 import { SettingsContext } from "./SettingsProvider";
 
-const EmptyPlaces = () => {
+function EmptyPlaces() {
   const { buildUrl } = React.useContext(SettingsContext);
 
   return (
@@ -13,7 +13,7 @@ const EmptyPlaces = () => {
       <div
         className="grid gap-4"
         style={{
-          gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))"
         }}
       >
         <AddPlace
@@ -24,6 +24,6 @@ const EmptyPlaces = () => {
       </div>
     </div>
   );
-};
+}
 
 export default EmptyPlaces;

@@ -7,9 +7,16 @@ import GooglePlacesAutocomplete, {
 } from "react-google-places-autocomplete";
 import { SettingsContext } from "./SettingsProvider";
 
-const Marker = ({ lat, lng }) => (
-  <div className="marker bg-red-500 w-[20px] h-[20px] rounded-full border-slate-900 border-2"></div>
-);
+function Marker() {
+  return (
+    <div className="marker bg-red-500 w-[20px] h-[20px] rounded-full border-slate-900 border-2" />
+  );
+}
+
+const DEFAULT_CENTER = {
+  lat: 37.7749,
+  lng: -122.4194,
+};
 
 const propTypes = {
   onGeocode: PropTypes.func.isRequired,
@@ -19,7 +26,11 @@ const propTypes = {
   }),
 };
 
-const Map = ({ onGeocode, defaultCenter }) => {
+const defaultProps = {
+  defaultCenter: DEFAULT_CENTER,
+};
+
+function Map({ onGeocode, defaultCenter }) {
   const { mapApiKey } = React.useContext(SettingsContext);
   if (mapApiKey === null) {
     return <span>No API key provided</span>;
@@ -35,7 +46,7 @@ const Map = ({ onGeocode, defaultCenter }) => {
     geocodeByPlaceId(placeId)
       .then((results) => {
         if (results.length > 0) {
-          const location = results[0].geometry.location;
+          const { location } = results[0].geometry;
           const lng = location.lng();
           const lat = location.lat();
           setCenter({ lat, lng });
@@ -47,6 +58,7 @@ const Map = ({ onGeocode, defaultCenter }) => {
           });
         }
       })
+      // eslint-disable-next-line no-console
       .catch((error) => console.error(error));
   };
 
@@ -55,12 +67,12 @@ const Map = ({ onGeocode, defaultCenter }) => {
       .then((results) => {
         setMarker({ lat, lng });
         if (results.length > 0) {
-          const location = results[0].geometry.location;
-          const lng = location.lng();
-          const lat = location.lat();
+          const { location } = results[0].geometry;
+          const locLng = location.lng();
+          const locLat = location.lat();
           onGeocode({
-            lat,
-            lng,
+            lat: locLat,
+            lng: locLng,
             address: results[0].formatted_address,
           });
           setValue(results[0].formatted_address);
@@ -72,10 +84,11 @@ const Map = ({ onGeocode, defaultCenter }) => {
           });
         }
       })
+      // eslint-disable-next-line no-console
       .catch((error) => console.error(error));
   };
 
-  const handleApiLoaded = (map, maps) => {
+  const handleApiLoaded = (map) => {
     setApiLoaded(true);
 
     map.addListener("click", (e) => {
@@ -145,8 +158,9 @@ const Map = ({ onGeocode, defaultCenter }) => {
       )}
     </div>
   );
-};
+}
 
 Map.propTypes = propTypes;
+Map.defaultProps = defaultProps;
 
 export default Map;

@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import { updateTempUnit } from "../utils/api";
 
@@ -6,10 +6,10 @@ export const SettingsContext = createContext();
 
 const LABELS = {
   c: "Celsius",
-  f: "Fahrenheit",
+  f: "Fahrenheit"
 };
 
-const SettingsProvider = ({ children, tempUnit, mapApiKey, paths }) => {
+function SettingsProvider({ children, tempUnit, mapApiKey, paths }) {
   const [tempSym, setTempType] = useState(tempUnit || "c");
 
   const toggleTempType = () => {
@@ -19,30 +19,37 @@ const SettingsProvider = ({ children, tempUnit, mapApiKey, paths }) => {
   };
 
   const buildUrl = Object.keys(paths).reduce((acc, path) => {
-    acc[path.replace("Path", "Url")] = function (id) {
+    acc[path.replace("Path", "Url")] = id => {
       if (paths[path].includes(":id")) {
         return paths[path].replace(":id", id);
-      } else {
-        return paths[path];
       }
+      return paths[path];
     };
     return acc;
   }, {});
 
+  const value = useMemo(
+    () => ({
+      tempType: LABELS[tempSym],
+      toggleTempType,
+      mapApiKey,
+      buildUrl
+    }),
+    [tempSym]
+  );
+
   return (
-    <SettingsContext.Provider
-      value={{ tempType: LABELS[tempSym], toggleTempType, mapApiKey, buildUrl }}
-    >
+    <SettingsContext.Provider value={value}>
       {children}
     </SettingsContext.Provider>
   );
-};
+}
 
 SettingsProvider.propTypes = {
   children: PropTypes.node.isRequired,
-  tempUnit: PropTypes.string,
-  mapApiKey: PropTypes.string,
-  places: PropTypes.arrayOf(PropTypes.string),
+  tempUnit: PropTypes.string.isRequired,
+  mapApiKey: PropTypes.string.isRequired,
+  paths: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
 export default SettingsProvider;

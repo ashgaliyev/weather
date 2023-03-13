@@ -9,60 +9,53 @@ import AddPlace from "./components/AddPlace";
 import EmptyPlaces from "./components/EmptyPlaces";
 import renderApp from "./utils/renderApp";
 
-const Places = (props) => {
+function Places({ places, forecasts }) {
   const { buildUrl } = React.useContext(SettingsContext);
 
-  const places = props.places.map((place) => {
-    const forecast = props.forecasts.find(
-      (forecast) => forecast.id === place.forecastId
-    );
+  const placesForecasts = places.map((place) => {
+    const forecast = forecasts.find((f) => f.id === place.forecastId);
     return { ...place, weather: forecast.weather };
   });
 
   return (
     <Page
-      heading={"My Places"}
-      topBlockLeft={null}
+      heading="My Places"
       topBlockRight={<TempSwitcher />}
       content={
-        <>
-          {places.length === 0 ? (
-            <EmptyPlaces />
-          ) : (
-            <>
-              <div
-                className="grid gap-4"
-                style={{
-                  gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))",
+        placesForecasts.length === 0 ? (
+          <EmptyPlaces />
+        ) : (
+          <div
+            className="grid gap-4"
+            style={{
+              gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))",
+            }}
+          >
+            {placesForecasts.map(({ id, name, weather }) => (
+              <PlaceCard
+                key={id}
+                heading={name}
+                weather={weather}
+                onClick={() => {
+                  window.location.href = buildUrl.placeUrl(id);
                 }}
-              >
-                {places.map(({ id, name, weather }) => (
-                  <PlaceCard
-                    key={id}
-                    heading={name}
-                    weather={weather}
-                    onClick={() => {
-                      window.location.href = buildUrl.placeUrl(id);
-                    }}
-                  />
-                ))}
-                <AddPlace
-                  onClick={() => {
-                    window.location.href = buildUrl.newPlaceUrl();
-                  }}
-                />
-              </div>
-            </>
-          )}
-        </>
+              />
+            ))}
+            <AddPlace
+              onClick={() => {
+                window.location.href = buildUrl.newPlaceUrl();
+              }}
+            />
+          </div>
+        )
       }
     />
   );
-};
+}
 
 Places.propTypes = {
-  forecasts: PropTypes.arrayOf(currentForecastShape),
-  places: PropTypes.arrayOf(placeShape),
+  forecasts: PropTypes.arrayOf(currentForecastShape).isRequired,
+  places: PropTypes.arrayOf(placeShape).isRequired,
 };
 
 renderApp(Places);
