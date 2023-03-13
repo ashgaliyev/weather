@@ -11,13 +11,26 @@ class Place < ApplicationRecord
   validates :lat, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
   validates :lng, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
 
-  before_create :set_forecast
-  after_update :set_forecast
+  before_create :create_forecast
+  after_update :update_forecast
   after_destroy :destroy_forecast
 
+  def update_forecast
+    set_forecast
+  end
+
+  def create_forecast
+    return if forecast
+
+    set_forecast
+  end
+
   def set_forecast
-    forecast = Forecast.within(10, origin: [lat, lng]).first
-    self.forecast = (forecast.presence || Forecast.create!(lat:, lng:))
+    self.forecast = (nearest_forecast || Forecast.create!(lat:, lng:))
+  end
+
+  def nearest_forecast
+    Forecast.within(10, origin: [lat, lng]).first
   end
 
   def destroy_forecast

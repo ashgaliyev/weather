@@ -39,4 +39,24 @@ RSpec.describe(Place, type: :model) do
       end
     end
   end
+
+  describe "after_destroy" do
+    let!(:place) { create(:place) }
+
+    context "when the forecast has no other places" do
+      it "destroys the forecast" do
+        expect { place.destroy! }.
+          to(change(Forecast, :count).
+by(-1))
+      end
+    end
+
+    context "when the forecast has other places" do
+      it "does not destroy the forecast" do
+        create(:place, forecast: place.forecast)
+        expect { place.destroy! }.
+          not_to(change(Forecast, :count))
+      end
+    end
+  end
 end

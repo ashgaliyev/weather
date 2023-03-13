@@ -7,7 +7,7 @@ RSpec.describe(PlacesController, type: :controller) do
     let(:user) { create(:user) }
 
     before do
-      user.places << create(:place, :with_forecast)
+      user.places << create(:place)
       session[:user_id] = user.id
     end
 
@@ -49,7 +49,7 @@ RSpec.describe(PlacesController, type: :controller) do
 
     describe "PUT #update" do
       it "returns http success" do
-        place = create(:place, :with_forecast)
+        place = create(:place)
         session[:places] = [place.id]
         put :update, params: { id: place.id, place: { name: "Amsterdam2" } }
         expect(place.reload.name).to(eq("Amsterdam2"))
@@ -59,7 +59,7 @@ RSpec.describe(PlacesController, type: :controller) do
 
     describe "DELETE #destroy" do
       it "returns http success" do
-        place = create(:place, :with_forecast)
+        place = create(:place)
         session[:places] = [place.id]
         delete :destroy, params: { id: place.id }
         expect(Place.count).to(eq(0))

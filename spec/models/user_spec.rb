@@ -22,14 +22,14 @@ RSpec.describe(User, type: :model) do
   describe "#save_places" do
     it "saves places" do
       user = create(:user)
-      place = create(:place, :with_forecast)
+      place = create(:place)
       user.save_places([place.id])
       expect(user.places).to(include(place))
     end
 
     it "does not save duplicate places" do
       user = create(:user)
-      place = create(:place, :with_forecast)
+      place = create(:place)
       user.places << place
       user.save_places([place.id])
       expect(user.places.count).to(eq(1))
