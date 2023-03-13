@@ -13,7 +13,11 @@ function Link({ name, url, onClick, dataTestId }) {
         onClick={onClick}
         data-test-id={dataTestId || ""}
         className="hover:cursor-pointer"
-        onKeyDown={onClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onClick();
+          }
+        }}
         role="button"
         tabIndex={0}
       >

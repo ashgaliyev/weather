@@ -9,7 +9,11 @@ function AddPlace({ onClick }) {
       data-test-id="add-place"
       role="button"
       tabIndex={0}
-      onKeyDown={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          onClick();
+        }
+      }}
     >
       <span className="text-2xl text-gray-400 group-hover:text-gray-500">
         New Place

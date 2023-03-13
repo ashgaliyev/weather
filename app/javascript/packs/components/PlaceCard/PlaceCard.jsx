@@ -10,7 +10,11 @@ function PlaceLink({ children, onClick }) {
       <div
         className="bg-white rounded-lg shadow-lg flex flex-row p-4 pl-0 max-w-sm hover:cursor-pointer"
         onClick={onClick}
-        onKeyDown={onClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onClick();
+          }
+        }}
         role="button"
         tabIndex={0}
         data-test-id="place-card"
